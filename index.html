@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0048)file:///C:/Users/FILIPE-PSE/Downloads/index.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>DashGerencial 2026</title>
-<script src="./DashGerencial 2026_files/chart.umd.js.baixados"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -124,7 +124,7 @@ main{padding:22px 28px;max-width:1500px;margin:0 auto}
 <body>
 
 <header>
-  <div class="logo">Dash<span>Gerencial</span> · 2026</div>
+  <div class="logo">Dash<span>Gerencial</span> &middot; 2026</div>
   <div class="hb">
     <span class="badge live" id="activeBadge">Relatorio 1</span>
     <span class="badge" id="cyclesBadge">3 meses</span>
@@ -132,23 +132,23 @@ main{padding:22px 28px;max-width:1500px;margin:0 auto}
 </header>
 
 <div class="tabs">
-  <div class="tab active" onclick="switchTab(&#39;dashboard&#39;,this)">Dashboard</div>
-  <div class="tab" onclick="switchTab(&#39;ciclos&#39;,this)">Adicionar Ciclos</div>
-  <div class="tab" onclick="switchTab(&#39;ia&#39;,this)">IA Assistente</div>
+  <div class="tab active" onclick="switchTab('dashboard',this)">Dashboard</div>
+  <div class="tab" onclick="switchTab('ciclos',this)">Adicionar Ciclos</div>
+  <div class="tab" onclick="switchTab('ia',this)">IA Assistente</div>
 </div>
 
 <main>
   <div class="rsel">
-    <button class="rsel-btn active" onclick="selectReport(1,this)">Relatorio 1 — Enviado</button>
-    <button class="rsel-btn" onclick="selectReport(2,this)">Relatorio 2 — Faturado</button>
+    <button class="rsel-btn active" onclick="selectReport(1,this)">Relatorio 1 &mdash; Enviado</button>
+    <button class="rsel-btn" onclick="selectReport(2,this)">Relatorio 2 &mdash; Faturado</button>
     <button class="rsel-btn" onclick="selectReport(3,this)">Comparativo R1 vs R2</button>
   </div>
-  <div class="kpi-row" id="kpiGrid"><div class="kpi k1"><div class="kpi-label">Total Acumulado</div><div class="kpi-value" style="color:var(--c1)">R$9.74M</div><div class="kpi-delta" style="color:var(--m)">3 meses</div></div><div class="kpi k2"><div class="kpi-label">Ultimo Mes</div><div class="kpi-value" style="color:var(--c2)">R$4.21M</div><div class="kpi-delta dn">▼ 10.7% vs anterior</div></div><div class="kpi k3"><div class="kpi-label">Pico</div><div class="kpi-value" style="color:var(--c3)">R$4.72M</div><div class="kpi-delta" style="color:var(--m)">Fevereiro</div></div><div class="kpi k4"><div class="kpi-label">Qtd Total Enviada</div><div class="kpi-value" style="color:var(--c4)">360</div><div class="kpi-delta" style="color:var(--m)">ordens/OS</div></div><div class="kpi k5"><div class="kpi-label">Obras</div><div class="kpi-value" style="color:var(--c5)">R$4.14M</div><div class="kpi-delta" style="color:var(--m)">42.5% do total</div></div></div>
+  <div class="kpi-row" id="kpiGrid"></div>
 
   <div id="tab-dashboard">
     <div class="gallery-title">15 visualizacoes gerenciais</div>
-    <div class="gallery-sub">Clique para expandir · ↓ para baixar em PNG</div>
-    <div class="gallery" id="gallery"><div class="card" id="card-c1"><div class="card-head"><div class="card-info"><div class="card-title">1 - Faturamento Total Mensal</div><div class="card-sub">Valor enviado por mes - visao geral</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c1" role="img" aria-label="1 - Faturamento Total Mensal" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c2"><div class="card-head"><div class="card-info"><div class="card-title">2 - Quantidade por Categoria</div><div class="card-sub">Qtd de OS/ordens enviadas por mes (Obras, Manut, IOP)</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c2" role="img" aria-label="2 - Quantidade por Categoria" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c3"><div class="card-head"><div class="card-info"><div class="card-title">3 - Obras: Valor x Quantidade</div><div class="card-sub">Eixo duplo - R$ enviado vs quantidade de ordens</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c3" role="img" aria-label="3 - Obras: Valor x Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c4"><div class="card-head"><div class="card-info"><div class="card-title">4 - Manutencao: Valor x Quantidade</div><div class="card-sub">Eixo duplo - R$ enviado vs quantidade de ordens</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c4" role="img" aria-label="4 - Manutencao: Valor x Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c5"><div class="card-head"><div class="card-info"><div class="card-title">5 - IOP: Valor x Quantidade</div><div class="card-sub">Eixo duplo - R$ enviado vs quantidade de ordens</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c5" role="img" aria-label="5 - IOP: Valor x Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c6"><div class="card-head"><div class="card-info"><div class="card-title">6 - Ticket Medio por OS</div><div class="card-sub">Valor medio por ordem de servico (Obras, Manut, IOP)</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c6" role="img" aria-label="6 - Ticket Medio por OS" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c7"><div class="card-head"><div class="card-info"><div class="card-title">7 - Composicao do Faturamento</div><div class="card-sub">Participacao de cada categoria no total acumulado</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c7" role="img" aria-label="7 - Composicao do Faturamento" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c8"><div class="card-head"><div class="card-info"><div class="card-title">8 - Composicao da Quantidade</div><div class="card-sub">Distribuicao de OS por categoria (acumulado)</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c8" role="img" aria-label="8 - Composicao da Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c9"><div class="card-head"><div class="card-info"><div class="card-title">9 - Evolucao por Categoria</div><div class="card-sub">Tendencia mensal de valor por segmento</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c9" role="img" aria-label="9 - Evolucao por Categoria" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c10"><div class="card-head"><div class="card-info"><div class="card-title">10 - Composicao Mensal Valor</div><div class="card-sub">Composicao do faturamento empilhada por mes</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c10" role="img" aria-label="10 - Composicao Mensal Valor" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c11"><div class="card-head"><div class="card-info"><div class="card-title">11 - R1 vs R2 Comparativo</div><div class="card-sub">Enviado x Faturado por mes</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c11" role="img" aria-label="11 - R1 vs R2 Comparativo" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c12"><div class="card-head"><div class="card-info"><div class="card-title">12 - Evolucao da Quantidade</div><div class="card-sub">Tendencia de OS/ordens por mes e categoria</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c12" role="img" aria-label="12 - Evolucao da Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c13"><div class="card-head"><div class="card-info"><div class="card-title">13 - Radar de Desempenho</div><div class="card-sub">Forca relativa por categoria e mes</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c13" role="img" aria-label="13 - Radar de Desempenho" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c14"><div class="card-head"><div class="card-info"><div class="card-title">14 - 3D Faturamento Mensal</div><div class="card-sub">Evolucao do total mensal em perspectiva 3D</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c14" role="img" aria-label="14 - 3D Faturamento Mensal" width="541" height="275" style="width: 433px; height: 220px;"></canvas></div></div><div class="card" id="card-c15"><div class="card-head"><div class="card-info"><div class="card-title">15 - 3D Composicao por Categoria</div><div class="card-sub">Participacao de cada categoria em perspectiva 3D</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c15" role="img" aria-label="15 - 3D Composicao por Categoria" width="541" height="275" style="width: 433px; height: 220px;"></canvas></div></div></div>
+    <div class="gallery-sub">Clique para expandir &middot; &#8595; para baixar em PNG</div>
+    <div class="gallery" id="gallery"></div>
   </div>
 
   <div id="tab-ciclos" style="display:none">
@@ -163,43 +163,43 @@ main{padding:22px 28px;max-width:1500px;margin:0 auto}
             <option>Outubro 2026</option><option>Novembro 2026</option><option>Dezembro 2026</option>
           </select>
         </div>
-        <div><label>OBRAS Qtd</label><input type="number" id="i_obras_q" placeholder="0"></div>
-        <div><label>OBRAS R$</label><input type="number" id="i_obras_v" placeholder="0"></div>
-        <div><label>MANUT Qtd</label><input type="number" id="i_manut_q" placeholder="0"></div>
-        <div><label>MANUT R$</label><input type="number" id="i_manut_v" placeholder="0"></div>
-        <div><label>IOP Qtd</label><input type="number" id="i_iop_q" placeholder="0"></div>
-        <div><label>IOP R$</label><input type="number" id="i_iop_v" placeholder="0"></div>
-        <div><label>OPEX R$</label><input type="number" id="i_opex_v" placeholder="0"></div>
-        <div><label>BACKLOG R$</label><input type="number" id="i_backlog_v" placeholder="0"></div>
+        <div><label>OBRAS Qtd</label><input type="number" id="i_obras_q" placeholder="0"/></div>
+        <div><label>OBRAS R$</label><input type="number" id="i_obras_v" placeholder="0"/></div>
+        <div><label>MANUT Qtd</label><input type="number" id="i_manut_q" placeholder="0"/></div>
+        <div><label>MANUT R$</label><input type="number" id="i_manut_v" placeholder="0"/></div>
+        <div><label>IOP Qtd</label><input type="number" id="i_iop_q" placeholder="0"/></div>
+        <div><label>IOP R$</label><input type="number" id="i_iop_v" placeholder="0"/></div>
+        <div><label>OPEX R$</label><input type="number" id="i_opex_v" placeholder="0"/></div>
+        <div><label>BACKLOG R$</label><input type="number" id="i_backlog_v" placeholder="0"/></div>
         <div><label>&nbsp;</label><button class="btn-add" onclick="addCycle()">+ Adicionar</button></div>
       </div>
-      <div class="ctags" id="ctags"><span style="font-size:12px;color:var(--m)">Nenhum ciclo adicionado.</span></div>
+      <div class="ctags" id="ctags"></div>
     </div>
   </div>
 
   <div id="tab-ia" style="display:none">
     <div class="ia-wrap">
       <div style="flex:1;min-width:270px">
-        <div id="keyBox" class="key-box" style="display: none;">
+        <div id="keyBox" class="key-box">
           <p>Ative a IA gratuita com sua chave <strong>Google Gemini</strong> (gratis, 1.500 req/dia).</p>
           <div class="key-row">
-            <input type="password" id="geminiKey" placeholder="AIzaSy...">
+            <input type="password" id="geminiKey" placeholder="AIzaSy..."/>
             <button class="btn-key" onclick="saveKey()">Salvar</button>
           </div>
           <div class="key-help">Gerar em: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a></div>
         </div>
-        <div id="keyOk" class="key-ok" style="display: flex;">
-          <span>●</span> Gemini ativo — gratuito 1.500 req/dia
+        <div id="keyOk" class="key-ok" style="display:none">
+          <span>&#9679;</span> Gemini ativo &mdash; gratuito 1.500 req/dia
           <button onclick="clearKey()" style="margin-left:auto;background:none;border:none;color:var(--m);cursor:pointer;font-size:11px;font-weight:500">trocar</button>
         </div>
         <div class="ai-panel">
           <div class="ai-hd">
-            <div class="ai-dot" id="aiDot"></div>
+            <div class="ai-dot off" id="aiDot"></div>
             <div style="flex:1">
-              <div style="font-size:13px;font-weight:700">IA Assistente — Gemini</div>
-              <div style="font-size:11px;color:var(--m)" id="aiStatus">Gemini ativo - 1.500 req/dia gratuitas</div>
+              <div style="font-size:13px;font-weight:700">IA Assistente &mdash; Gemini</div>
+              <div style="font-size:11px;color:var(--m)" id="aiStatus">Configure sua chave acima</div>
             </div>
-            <div style="font-size:11px;color:var(--m)" id="memCount">0 mem.</div>
+            <div style="font-size:11px;color:var(--m)" id="memCount"></div>
           </div>
           <div class="ai-msgs" id="aiMsgs">
             <div class="msg ai">Ola! Sou a IA do Dashboard. Posso analisar seus dados, comparar relatorios, identificar tendencias e aprender com cada ciclo. Como posso ajudar?</div>
@@ -212,19 +212,19 @@ main{padding:22px 28px;max-width:1500px;margin:0 auto}
             <span class="sugg" onclick="useSugg(this)">Qual grafico usar na apresentacao?</span>
           </div>
           <div class="ai-inp">
-            <input type="text" id="aiInput" placeholder="Pergunte sobre dados, tendencias, ciclos..." onkeydown="if(event.key===&#39;Enter&#39;)sendAI()">
-            <button id="sendBtn" onclick="sendAI()">Enviar</button>
+            <input type="text" id="aiInput" placeholder="Pergunte sobre dados, tendencias, ciclos..." onkeydown="if(event.key==='Enter')sendAI()"/>
+            <button id="sendBtn" onclick="sendAI()" disabled>Enviar</button>
           </div>
         </div>
       </div>
       <div class="mem-panel">
         <div class="mem-title">Memoria <span class="mem-badge" id="memBadge">0</span></div>
         <div style="font-size:11px;color:var(--m);margin-bottom:9px;line-height:1.5">A IA aprende com conversas e ciclos.</div>
-        <div id="memList"><div style="font-size:11px;color:var(--m)">Nenhuma memoria ainda.</div></div>
+        <div id="memList"></div>
         <button class="btn-mem-clr" onclick="clearMem()">Limpar memoria</button>
         <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--b)">
           <div class="mem-title">Ciclos extras</div>
-          <div id="cyclesMemList" style="font-size:11px"><span style="font-size:11px;color:var(--m)">Nenhum ciclo.</span></div>
+          <div id="cyclesMemList" style="font-size:11px"></div>
         </div>
       </div>
     </div>
@@ -233,12 +233,12 @@ main{padding:22px 28px;max-width:1500px;margin:0 auto}
 
 <div class="modal-ov" id="modalOv" onclick="if(event.target===this)closeModal()">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
     <div id="modalTitle" style="font-size:15px;font-weight:700;letter-spacing:-.2px"></div>
     <div id="modalSub" style="font-size:12px;color:var(--m);margin-top:3px"></div>
     <div class="modal-cw" id="modalCW"></div>
     <div class="modal-foot">
-      <button class="btn-dl-lg" onclick="downloadModal()">↓ Baixar PNG</button>
+      <button class="btn-dl-lg" onclick="downloadModal()">&#8595; Baixar PNG</button>
     </div>
   </div>
 </div>
@@ -936,6 +936,5 @@ renderCyclesList();
 updateKeyUI();
 renderMemPanel();
 </script>
-
-
-</body></html>
+</body>
+</html>
