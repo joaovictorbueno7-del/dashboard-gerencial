@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)file:///C:/Users/FILIPE-PSE/Downloads/index.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DashGerencial 2026</title>
+<script src="./DashGerencial 2026_files/chart.umd.js.baixados"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;--s:#111827;--s2:#1a2235;--b:#2a3550;--t:#f0f4ff;--m:#7b8db0;
+  --c1:#4f8ef7;--c2:#34d399;--c3:#f59e0b;--c4:#a78bfa;--c5:#fb7185;
+}
+body{background:var(--bg);color:var(--t);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+header{background:var(--s);border-bottom:1px solid var(--b);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:15px;font-weight:700;letter-spacing:-.3px}.logo span{color:var(--c1)}
+.hb{display:flex;gap:8px}
+.badge{background:var(--s2);border:1px solid var(--b);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--m);font-weight:500}
+.badge.live{color:var(--c2);border-color:#34d39944}
+.tabs{display:flex;background:var(--s);border-bottom:1px solid var(--b);padding:0 28px;gap:4px}
+.tab{padding:12px 20px;font-size:13px;font-weight:500;color:var(--m);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.15s}
+.tab.active{color:var(--t);border-bottom-color:var(--c1)}
+.tab:hover{color:var(--t)}
+main{padding:22px 28px;max-width:1500px;margin:0 auto}
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:22px}
+.kpi{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.k1::before{background:var(--c1)}
+.kpi.k2::before{background:var(--c2)}
+.kpi.k3::before{background:var(--c3)}
+.kpi.k4::before{background:var(--c4)}
+.kpi.k5::before{background:var(--c5)}
+.kpi-label{font-size:10px;color:var(--m);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-weight:600}
+.kpi-value{font-size:22px;font-weight:700;letter-spacing:-.5px}
+.kpi-delta{font-size:11px;margin-top:4px;display:flex;align-items:center;gap:4px}
+.up{color:var(--c2)}.dn{color:var(--c5)}
+/* REPORT SELECTOR */
+.rsel{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.rsel-btn{padding:7px 16px;border-radius:8px;border:1px solid var(--b);background:var(--s2);color:var(--m);cursor:pointer;font-size:12px;font-weight:600;transition:.15s;letter-spacing:.02em}
+.rsel-btn.active{background:var(--c1);border-color:var(--c1);color:#fff}
+.rsel-btn:hover:not(.active){border-color:var(--c1);color:var(--t)}
+/* GALLERY */
+.gallery-title{font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-.2px}
+.gallery-sub{font-size:12px;color:var(--m);margin-bottom:18px}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px}
+.card{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:18px;cursor:pointer;transition:.2s;position:relative}
+.card:hover{border-color:var(--c1);transform:translateY(-2px);box-shadow:0 8px 32px rgba(79,142,247,.12)}
+.card.selected{border:2px solid var(--c2);box-shadow:0 0 0 3px rgba(52,211,153,.08)}
+.card.selected::after{content:'Selecionado';position:absolute;top:10px;right:36px;background:var(--c2);color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.04em}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.card-info{}
+.card-title{font-size:13px;font-weight:700;margin-bottom:2px;letter-spacing:-.2px}
+.card-sub{font-size:11px;color:var(--m)}
+.card-btns{display:flex;gap:5px;flex-shrink:0;margin-left:8px}
+.cbtn{background:var(--s2);border:1px solid var(--b);border-radius:6px;color:var(--m);cursor:pointer;font-size:11px;padding:4px 9px;font-weight:500;transition:.15s}
+.cbtn:hover{background:var(--c2);border-color:var(--c2);color:#000}
+.cbtn.exp:hover{background:var(--c1);border-color:var(--c1);color:#fff}
+.chart-wrap{position:relative;height:220px;width:100%}
+/* CICLOS */
+.add-cycle{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:22px;margin-bottom:22px}
+.ac-title{font-size:14px;font-weight:700;margin-bottom:14px;letter-spacing:-.2px}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;align-items:end}
+.fg label{display:block;font-size:10px;color:var(--m);margin-bottom:4px;text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+.fg input,.fg select{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:9px 11px;color:var(--t);font-size:13px;outline:none;transition:.15s}
+.fg input:focus,.fg select:focus{border-color:var(--c1);background:var(--bg)}
+.btn-add{padding:10px 18px;background:var(--c1);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;letter-spacing:.02em}
+.btn-add:hover{background:#3a7de8}
+.ctags{margin-top:14px;display:flex;flex-wrap:wrap;gap:7px}
+.ctag{background:var(--s2);border:1px solid var(--b);border-radius:20px;padding:4px 12px;font-size:12px;display:flex;align-items:center;gap:6px;color:var(--m)}
+.ctag button{background:none;border:none;color:var(--m);cursor:pointer;font-size:14px;line-height:1;padding:0}
+.ctag button:hover{color:var(--c5)}
+/* IA */
+.ia-wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.ai-panel{background:var(--s);border:1px solid var(--b);border-radius:14px;overflow:hidden;flex:1;min-width:280px}
+.mem-panel{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:16px;width:255px;flex-shrink:0}
+.mem-title{font-size:10px;font-weight:700;color:var(--m);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.mem-badge{display:inline-block;background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.3);border-radius:10px;padding:1px 7px;font-size:10px;color:var(--c1);margin-left:4px}
+.mem-item{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:8px 10px;font-size:11px;margin-bottom:5px;line-height:1.5;color:var(--t)}
+.mem-time{color:var(--m);font-size:10px;margin-top:2px}
+.btn-mem-clr{margin-top:8px;width:100%;padding:7px;background:none;border:1px solid var(--b);border-radius:7px;color:var(--m);font-size:12px;cursor:pointer;font-weight:500;transition:.15s}
+.btn-mem-clr:hover{border-color:var(--c5);color:var(--c5)}
+.ai-hd{background:var(--s2);padding:13px 18px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:10px}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--c2);animation:pulse 2s infinite}
+.ai-dot.off{background:var(--c5);animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ai-msgs{height:320px;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:82%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;white-space:pre-wrap}
+.msg.ai{background:var(--s2);align-self:flex-start;border-bottom-left-radius:3px}
+.msg.user{background:var(--c1);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.msg.loading{color:var(--m);font-style:italic}
+.msg.err{background:#2d1b1b;border:1px solid rgba(251,113,133,.3);color:var(--c5);align-self:flex-start}
+.sugqs{display:flex;flex-wrap:wrap;gap:5px;padding:10px 18px;border-top:1px solid var(--b)}
+.sugg{background:var(--s2);border:1px solid var(--b);border-radius:20px;padding:5px 11px;font-size:11px;color:var(--c1);cursor:pointer;font-weight:500;transition:.15s}
+.sugg:hover{background:var(--c1);border-color:var(--c1);color:#fff}
+.ai-inp{display:flex;border-top:1px solid var(--b)}
+.ai-inp input{flex:1;background:var(--s2);border:none;padding:13px 16px;color:var(--t);font-size:13px;outline:none}
+.ai-inp button{padding:13px 20px;background:var(--c1);border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;letter-spacing:.02em}
+.ai-inp button:hover{background:#3a7de8}
+.ai-inp button:disabled{background:var(--s2);color:var(--m);cursor:not-allowed}
+.key-box{background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.2);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.key-box p{color:#93c5fd;font-size:13px;margin-bottom:9px;line-height:1.5}
+.key-row{display:flex;gap:7px}
+.key-row input{flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:9px 11px;color:var(--t);font-size:13px;outline:none;font-family:monospace;transition:.15s}
+.key-row input:focus{border-color:var(--c1)}
+.btn-key{padding:9px 15px;background:var(--c1);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+.key-help{font-size:11px;color:var(--m);margin-top:7px}
+.key-help a{color:var(--c1);text-decoration:none}
+.key-ok{background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:9px 14px;margin-bottom:10px;font-size:12px;color:var(--c2);display:flex;align-items:center;gap:7px;font-weight:500}
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-ov.open{display:flex}
+.modal{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:26px;width:100%;max-width:980px;position:relative}
+.modal-close{position:absolute;top:14px;right:15px;background:none;border:none;color:var(--m);font-size:20px;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--t)}
+.modal-cw{height:460px;width:100%;margin-top:16px;position:relative}
+.modal-cw canvas{width:100%!important;height:460px!important;display:block}
+.modal-foot{margin-top:14px;display:flex;justify-content:flex-end;gap:8px}
+.btn-dl-lg{padding:9px 18px;background:var(--c2);border:none;border-radius:8px;color:#000;font-size:13px;font-weight:700;cursor:pointer;transition:.15s}
+.btn-dl-lg:hover{background:#2bc889}
+@media(max-width:700px){main{padding:12px}.gallery{grid-template-columns:1fr}header{padding:11px 14px}.mem-panel{width:100%}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Dash<span>Gerencial</span> · 2026</div>
+  <div class="hb">
+    <span class="badge live" id="activeBadge">Relatorio 1</span>
+    <span class="badge" id="cyclesBadge">3 meses</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab(&#39;dashboard&#39;,this)">Dashboard</div>
+  <div class="tab" onclick="switchTab(&#39;ciclos&#39;,this)">Adicionar Ciclos</div>
+  <div class="tab" onclick="switchTab(&#39;ia&#39;,this)">IA Assistente</div>
+</div>
+
+<main>
+  <div class="rsel">
+    <button class="rsel-btn active" onclick="selectReport(1,this)">Relatorio 1 — Enviado</button>
+    <button class="rsel-btn" onclick="selectReport(2,this)">Relatorio 2 — Faturado</button>
+    <button class="rsel-btn" onclick="selectReport(3,this)">Comparativo R1 vs R2</button>
+  </div>
+  <div class="kpi-row" id="kpiGrid"><div class="kpi k1"><div class="kpi-label">Total Acumulado</div><div class="kpi-value" style="color:var(--c1)">R$9.74M</div><div class="kpi-delta" style="color:var(--m)">3 meses</div></div><div class="kpi k2"><div class="kpi-label">Ultimo Mes</div><div class="kpi-value" style="color:var(--c2)">R$4.21M</div><div class="kpi-delta dn">▼ 10.7% vs anterior</div></div><div class="kpi k3"><div class="kpi-label">Pico</div><div class="kpi-value" style="color:var(--c3)">R$4.72M</div><div class="kpi-delta" style="color:var(--m)">Fevereiro</div></div><div class="kpi k4"><div class="kpi-label">Qtd Total Enviada</div><div class="kpi-value" style="color:var(--c4)">360</div><div class="kpi-delta" style="color:var(--m)">ordens/OS</div></div><div class="kpi k5"><div class="kpi-label">Obras</div><div class="kpi-value" style="color:var(--c5)">R$4.14M</div><div class="kpi-delta" style="color:var(--m)">42.5% do total</div></div></div>
+
+  <div id="tab-dashboard">
+    <div class="gallery-title">15 visualizacoes gerenciais</div>
+    <div class="gallery-sub">Clique para expandir · ↓ para baixar em PNG</div>
+    <div class="gallery" id="gallery"><div class="card" id="card-c1"><div class="card-head"><div class="card-info"><div class="card-title">1 - Faturamento Total Mensal</div><div class="card-sub">Valor enviado por mes - visao geral</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c1" role="img" aria-label="1 - Faturamento Total Mensal" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c2"><div class="card-head"><div class="card-info"><div class="card-title">2 - Quantidade por Categoria</div><div class="card-sub">Qtd de OS/ordens enviadas por mes (Obras, Manut, IOP)</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c2" role="img" aria-label="2 - Quantidade por Categoria" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c3"><div class="card-head"><div class="card-info"><div class="card-title">3 - Obras: Valor x Quantidade</div><div class="card-sub">Eixo duplo - R$ enviado vs quantidade de ordens</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c3" role="img" aria-label="3 - Obras: Valor x Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c4"><div class="card-head"><div class="card-info"><div class="card-title">4 - Manutencao: Valor x Quantidade</div><div class="card-sub">Eixo duplo - R$ enviado vs quantidade de ordens</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c4" role="img" aria-label="4 - Manutencao: Valor x Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c5"><div class="card-head"><div class="card-info"><div class="card-title">5 - IOP: Valor x Quantidade</div><div class="card-sub">Eixo duplo - R$ enviado vs quantidade de ordens</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c5" role="img" aria-label="5 - IOP: Valor x Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c6"><div class="card-head"><div class="card-info"><div class="card-title">6 - Ticket Medio por OS</div><div class="card-sub">Valor medio por ordem de servico (Obras, Manut, IOP)</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c6" role="img" aria-label="6 - Ticket Medio por OS" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c7"><div class="card-head"><div class="card-info"><div class="card-title">7 - Composicao do Faturamento</div><div class="card-sub">Participacao de cada categoria no total acumulado</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c7" role="img" aria-label="7 - Composicao do Faturamento" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c8"><div class="card-head"><div class="card-info"><div class="card-title">8 - Composicao da Quantidade</div><div class="card-sub">Distribuicao de OS por categoria (acumulado)</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c8" role="img" aria-label="8 - Composicao da Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c9"><div class="card-head"><div class="card-info"><div class="card-title">9 - Evolucao por Categoria</div><div class="card-sub">Tendencia mensal de valor por segmento</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c9" role="img" aria-label="9 - Evolucao por Categoria" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c10"><div class="card-head"><div class="card-info"><div class="card-title">10 - Composicao Mensal Valor</div><div class="card-sub">Composicao do faturamento empilhada por mes</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c10" role="img" aria-label="10 - Composicao Mensal Valor" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c11"><div class="card-head"><div class="card-info"><div class="card-title">11 - R1 vs R2 Comparativo</div><div class="card-sub">Enviado x Faturado por mes</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c11" role="img" aria-label="11 - R1 vs R2 Comparativo" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c12"><div class="card-head"><div class="card-info"><div class="card-title">12 - Evolucao da Quantidade</div><div class="card-sub">Tendencia de OS/ordens por mes e categoria</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c12" role="img" aria-label="12 - Evolucao da Quantidade" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c13"><div class="card-head"><div class="card-info"><div class="card-title">13 - Radar de Desempenho</div><div class="card-sub">Forca relativa por categoria e mes</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c13" role="img" aria-label="13 - Radar de Desempenho" width="541" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 433px;"></canvas></div></div><div class="card" id="card-c14"><div class="card-head"><div class="card-info"><div class="card-title">14 - 3D Faturamento Mensal</div><div class="card-sub">Evolucao do total mensal em perspectiva 3D</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c14" role="img" aria-label="14 - 3D Faturamento Mensal" width="541" height="275" style="width: 433px; height: 220px;"></canvas></div></div><div class="card" id="card-c15"><div class="card-head"><div class="card-info"><div class="card-title">15 - 3D Composicao por Categoria</div><div class="card-sub">Participacao de cada categoria em perspectiva 3D</div></div><div class="card-btns"><button class="cbtn">PNG</button><button class="cbtn exp">&amp;#x26F6;</button></div></div><div class="chart-wrap"><canvas id="c15" role="img" aria-label="15 - 3D Composicao por Categoria" width="541" height="275" style="width: 433px; height: 220px;"></canvas></div></div></div>
+  </div>
+
+  <div id="tab-ciclos" style="display:none">
+    <div class="add-cycle">
+      <div class="ac-title">Adicionar novo ciclo mensal</div>
+      <div class="fg">
+        <div>
+          <label>Mes</label>
+          <select id="newMes">
+            <option>Abril 2026</option><option>Maio 2026</option><option>Junho 2026</option>
+            <option>Julho 2026</option><option>Agosto 2026</option><option>Setembro 2026</option>
+            <option>Outubro 2026</option><option>Novembro 2026</option><option>Dezembro 2026</option>
+          </select>
+        </div>
+        <div><label>OBRAS Qtd</label><input type="number" id="i_obras_q" placeholder="0"></div>
+        <div><label>OBRAS R$</label><input type="number" id="i_obras_v" placeholder="0"></div>
+        <div><label>MANUT Qtd</label><input type="number" id="i_manut_q" placeholder="0"></div>
+        <div><label>MANUT R$</label><input type="number" id="i_manut_v" placeholder="0"></div>
+        <div><label>IOP Qtd</label><input type="number" id="i_iop_q" placeholder="0"></div>
+        <div><label>IOP R$</label><input type="number" id="i_iop_v" placeholder="0"></div>
+        <div><label>OPEX R$</label><input type="number" id="i_opex_v" placeholder="0"></div>
+        <div><label>BACKLOG R$</label><input type="number" id="i_backlog_v" placeholder="0"></div>
+        <div><label>&nbsp;</label><button class="btn-add" onclick="addCycle()">+ Adicionar</button></div>
+      </div>
+      <div class="ctags" id="ctags"><span style="font-size:12px;color:var(--m)">Nenhum ciclo adicionado.</span></div>
+    </div>
+  </div>
+
+  <div id="tab-ia" style="display:none">
+    <div class="ia-wrap">
+      <div style="flex:1;min-width:270px">
+        <div id="keyBox" class="key-box" style="display: none;">
+          <p>Ative a IA gratuita com sua chave <strong>Google Gemini</strong> (gratis, 1.500 req/dia).</p>
+          <div class="key-row">
+            <input type="password" id="geminiKey" placeholder="AIzaSy...">
+            <button class="btn-key" onclick="saveKey()">Salvar</button>
+          </div>
+          <div class="key-help">Gerar em: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a></div>
+        </div>
+        <div id="keyOk" class="key-ok" style="display: flex;">
+          <span>●</span> Gemini ativo — gratuito 1.500 req/dia
+          <button onclick="clearKey()" style="margin-left:auto;background:none;border:none;color:var(--m);cursor:pointer;font-size:11px;font-weight:500">trocar</button>
+        </div>
+        <div class="ai-panel">
+          <div class="ai-hd">
+            <div class="ai-dot" id="aiDot"></div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:700">IA Assistente — Gemini</div>
+              <div style="font-size:11px;color:var(--m)" id="aiStatus">Gemini ativo - 1.500 req/dia gratuitas</div>
+            </div>
+            <div style="font-size:11px;color:var(--m)" id="memCount">0 mem.</div>
+          </div>
+          <div class="ai-msgs" id="aiMsgs">
+            <div class="msg ai">Ola! Sou a IA do Dashboard. Posso analisar seus dados, comparar relatorios, identificar tendencias e aprender com cada ciclo. Como posso ajudar?</div>
+          </div>
+          <div class="sugqs">
+            <span class="sugg" onclick="useSugg(this)">Qual categoria cresceu mais?</span>
+            <span class="sugg" onclick="useSugg(this)">Resumo executivo</span>
+            <span class="sugg" onclick="useSugg(this)">Compare R1 e R2</span>
+            <span class="sugg" onclick="useSugg(this)">Melhor mes?</span>
+            <span class="sugg" onclick="useSugg(this)">Qual grafico usar na apresentacao?</span>
+          </div>
+          <div class="ai-inp">
+            <input type="text" id="aiInput" placeholder="Pergunte sobre dados, tendencias, ciclos..." onkeydown="if(event.key===&#39;Enter&#39;)sendAI()">
+            <button id="sendBtn" onclick="sendAI()">Enviar</button>
+          </div>
+        </div>
+      </div>
+      <div class="mem-panel">
+        <div class="mem-title">Memoria <span class="mem-badge" id="memBadge">0</span></div>
+        <div style="font-size:11px;color:var(--m);margin-bottom:9px;line-height:1.5">A IA aprende com conversas e ciclos.</div>
+        <div id="memList"><div style="font-size:11px;color:var(--m)">Nenhuma memoria ainda.</div></div>
+        <button class="btn-mem-clr" onclick="clearMem()">Limpar memoria</button>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--b)">
+          <div class="mem-title">Ciclos extras</div>
+          <div id="cyclesMemList" style="font-size:11px"><span style="font-size:11px;color:var(--m)">Nenhum ciclo.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-ov" id="modalOv" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalTitle" style="font-size:15px;font-weight:700;letter-spacing:-.2px"></div>
+    <div id="modalSub" style="font-size:12px;color:var(--m);margin-top:3px"></div>
+    <div class="modal-cw" id="modalCW"></div>
+    <div class="modal-foot">
+      <button class="btn-dl-lg" onclick="downloadModal()">↓ Baixar PNG</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var BASE = {
+  r1: {
+    labels: ['Janeiro','Fevereiro','Marco'],
+    obras_q: [5,50,28], obras_v: [556840.63,2306164.24,1275529.27],
+    manut_q: [3,16,25], manut_v: [40221.47,875268.21,1431837.85],
+    iop_q:   [27,100,106], iop_v: [96037.08,275158.12,442612.35],
+    opex_v:  [124851.99,311774.58,534000],
+    backlog_v:[0,946980.79,526364.90],
+    totais:  [817951.17,4715345.94,4210344.37]
+  },
+  r2: {
+    labels: ['Janeiro','Fevereiro','Marco'],
+    obras_q: [5,50,28], obras_v: [556840.63,2285089.19,1275529.27],
+    manut_q: [3,16,25], manut_v: [38053.03,474802.04,1431837.85],
+    iop_q:   [27,100,106], iop_v: [96037.08,230791.66,442612.35],
+    opex_v:  [124851.99,311774.58,534000],
+    backlog_v:[0,1433799.11,526364.90],
+    totais:  [815782.73,4736256.58,4210344.37]
+  }
+};
+
+var VCATS  = ['obras_v','manut_v','iop_v','opex_v','backlog_v'];
+var VCATS3 = ['obras_v','manut_v','iop_v'];
+var QCATS  = ['obras_q','manut_q','iop_q'];
+var CLBLS  = ['Obras','Manut','IOP','OPEX','Backlog'];
+var QLBLS  = ['Obras','Manut','IOP'];
+var COL    = ['#4f8ef7','#34d399','#f59e0b','#a78bfa','#fb7185'];
+var MCOL   = ['#4f8ef7','#34d399','#f59e0b','#a78bfa','#fb7185','#06b6d4','#ec4899','#84cc16'];
+
+var curR=1, selCard=null, charts={}, modalChart=null, currentModalCfg=null;
+var extraCycles = JSON.parse(localStorage.getItem('dash_cycles')||'[]');
+var aiMem       = JSON.parse(localStorage.getItem('dash_ai_mem')||'[]');
+var chatHist    = [];
+
+function fmt(v) {
+  if(!v||v===0) return '-';
+  if(v>=1e6) return 'R$'+(v/1e6).toFixed(2)+'M';
+  if(v>=1e3) return 'R$'+(v/1e3).toFixed(0)+'k';
+  return 'R$'+v.toFixed(0);
+}
+function fmtFull(v) { return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function ts() { return new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+
+function getData() {
+  var base = curR===2 ? BASE.r2 : BASE.r1;
+  if(!extraCycles.length) return base;
+  var d = {
+    labels:    base.labels.slice(),
+    obras_q:   base.obras_q.slice(),   obras_v: base.obras_v.slice(),
+    manut_q:   base.manut_q.slice(),   manut_v: base.manut_v.slice(),
+    iop_q:     base.iop_q.slice(),     iop_v:   base.iop_v.slice(),
+    opex_v:    base.opex_v.slice(),    backlog_v: base.backlog_v.slice(),
+    totais:    base.totais.slice()
+  };
+  extraCycles.forEach(function(c) {
+    d.labels.push(c.label);
+    d.obras_q.push(c.obras_q||0); d.obras_v.push(c.obras_v||0);
+    d.manut_q.push(c.manut_q||0); d.manut_v.push(c.manut_v||0);
+    d.iop_q.push(c.iop_q||0);     d.iop_v.push(c.iop_v||0);
+    d.opex_v.push(c.opex_v||0);   d.backlog_v.push(c.backlog_v||0);
+    d.totais.push((c.obras_v||0)+(c.manut_v||0)+(c.iop_v||0)+(c.opex_v||0)+(c.backlog_v||0));
+  });
+  return d;
+}
+
+function renderKPIs() {
+  var d = getData(), n = d.labels.length;
+  var last = d.totais[n-1], prev = d.totais[n-2]||0;
+  var delta = prev>0 ? (last-prev)/prev*100 : 0;
+  var total = d.totais.reduce(function(a,b){return a+b;},0);
+  var peakIdx = d.totais.indexOf(Math.max.apply(null,d.totais));
+  var totalQ = [d.obras_q,d.manut_q,d.iop_q].reduce(function(s,arr){
+    return s+arr.reduce(function(a,b){return a+b;},0);
+  },0);
+  var obT = d.obras_v.reduce(function(a,b){return a+b;},0);
+  document.getElementById('kpiGrid').innerHTML =
+    '<div class="kpi k1"><div class="kpi-label">Total Acumulado</div><div class="kpi-value" style="color:var(--c1)">'+fmt(total)+'</div><div class="kpi-delta" style="color:var(--m)">'+n+' meses</div></div>'+
+    '<div class="kpi k2"><div class="kpi-label">Ultimo Mes</div><div class="kpi-value" style="color:var(--c2)">'+fmt(last)+'</div><div class="kpi-delta '+(delta>=0?'up':'dn')+'">'+(delta>=0?'&#9650;':'&#9660;')+' '+Math.abs(delta).toFixed(1)+'% vs anterior</div></div>'+
+    '<div class="kpi k3"><div class="kpi-label">Pico</div><div class="kpi-value" style="color:var(--c3)">'+fmt(Math.max.apply(null,d.totais))+'</div><div class="kpi-delta" style="color:var(--m)">'+d.labels[peakIdx]+'</div></div>'+
+    '<div class="kpi k4"><div class="kpi-label">Qtd Total Enviada</div><div class="kpi-value" style="color:var(--c4)">'+totalQ+'</div><div class="kpi-delta" style="color:var(--m)">ordens/OS</div></div>'+
+    '<div class="kpi k5"><div class="kpi-label">Obras</div><div class="kpi-value" style="color:var(--c5)">'+fmt(obT)+'</div><div class="kpi-delta" style="color:var(--m)">'+(obT/total*100).toFixed(1)+'% do total</div></div>';
+  document.getElementById('cyclesBadge').textContent = n+' meses';
+}
+
+// Chart.js helpers
+function scV(st) {
+  return {
+    x: {stacked:!!st, ticks:{color:'#7b8db0',autoSkip:false}, grid:{display:false}},
+    y: {stacked:!!st, ticks:{callback:function(v){return fmt(v);},color:'#7b8db0',maxTicksLimit:5}, grid:{color:'rgba(255,255,255,.04)'}}
+  };
+}
+function scQ() {
+  return {
+    x: {ticks:{color:'#7b8db0',autoSkip:false}, grid:{display:false}},
+    y: {ticks:{color:'#7b8db0',maxTicksLimit:5}, grid:{color:'rgba(255,255,255,.04)'}}
+  };
+}
+function scDual() {
+  return {
+    x: {ticks:{color:'#7b8db0',autoSkip:false}, grid:{display:false}},
+    yV: {type:'linear', position:'left',  ticks:{callback:function(v){return fmt(v);},color:'#7b8db0',maxTicksLimit:5}, grid:{color:'rgba(255,255,255,.04)'}},
+    yQ: {type:'linear', position:'right', ticks:{color:'#7b8db0',maxTicksLimit:5}, grid:{display:false}}
+  };
+}
+function bpLeg(labels) {
+  return {display:true, position:'bottom', labels:{color:'#7b8db0',font:{size:10},padding:10,usePointStyle:true}};
+}
+function bpTip(mode) {
+  if(mode==='index') return {mode:'index', intersect:false};
+  return {};
+}
+
+// 3D render helpers
+function make3D(canvas, labels, values, colors, isModal) {
+  var H = isModal ? 460 : 220;
+  var pw = canvas.parentElement ? canvas.parentElement.offsetWidth : 600;
+  var W = pw > 0 ? pw : 600;
+  var dpr = window.devicePixelRatio||1;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  var n = labels.length;
+  var maxV = Math.max.apply(null,values)||1;
+  var PAD = {t:28,r:24,b:44,l:62};
+  var cW=W-PAD.l-PAD.r, cH=H-PAD.t-PAD.b;
+  var DX=8, DY=5;
+  var bW = Math.min((cW/n)*0.54, 56);
+  // grid
+  [0,0.25,0.5,0.75,1].forEach(function(t) {
+    var y = PAD.t+cH-t*cH;
+    ctx.beginPath(); ctx.moveTo(PAD.l,y); ctx.lineTo(PAD.l+cW+DX,y);
+    ctx.strokeStyle='rgba(255,255,255,.06)'; ctx.lineWidth=0.5; ctx.stroke();
+    ctx.fillStyle='#7b8db0'; ctx.font='10px sans-serif'; ctx.textAlign='right';
+    ctx.fillText(fmt(t*maxV), PAD.l-6, y+4);
+  });
+  // bars
+  for(var i=0;i<n;i++) {
+    var v = values[i]||0;
+    var bh = v/maxV*cH;
+    if(bh<1) { bh=1; }
+    var x = PAD.l+(cW/n)*i+(cW/n-bW)/2;
+    var y0 = PAD.t+cH;
+    var base = colors[i%colors.length];
+    // lighten for top, darken for side
+    ctx.beginPath(); ctx.moveTo(x,y0); ctx.lineTo(x+bW,y0); ctx.lineTo(x+bW,y0-bh); ctx.lineTo(x,y0-bh); ctx.closePath();
+    ctx.fillStyle=base; ctx.fill(); ctx.strokeStyle='rgba(0,0,0,.12)'; ctx.lineWidth=0.5; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x,y0-bh); ctx.lineTo(x+DX,y0-bh-DY); ctx.lineTo(x+bW+DX,y0-bh-DY); ctx.lineTo(x+bW,y0-bh); ctx.closePath();
+    ctx.fillStyle='rgba(255,255,255,.22)'; ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle=shiftColor(base,40); ctx.fill(); ctx.strokeStyle='rgba(0,0,0,.08)'; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x+bW,y0); ctx.lineTo(x+bW+DX,y0-DY); ctx.lineTo(x+bW+DX,y0-bh-DY); ctx.lineTo(x+bW,y0-bh); ctx.closePath();
+    ctx.fillStyle=shiftColor(base,-40); ctx.fill(); ctx.stroke();
+    // label
+    var fs = Math.min(11, Math.max(9, cW/n/5));
+    ctx.fillStyle='#f0f4ff'; ctx.font=fs+'px sans-serif'; ctx.textAlign='center';
+    var lbl = labels[i].length>4 ? labels[i].slice(0,3) : labels[i];
+    ctx.fillText(lbl, x+bW/2, PAD.t+cH+16);
+    if(bh>22) {
+      ctx.fillStyle='rgba(255,255,255,.9)'; ctx.font='9px sans-serif';
+      ctx.fillText(fmt(v), x+bW/2+DX/2, y0-bh-DY-4);
+    }
+  }
+}
+function shiftColor(hex, amount) {
+  var r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  r=Math.max(0,Math.min(255,r+amount));
+  g=Math.max(0,Math.min(255,g+amount));
+  b=Math.max(0,Math.min(255,b+amount));
+  return '#'+[r,g,b].map(function(x){return x.toString(16).padStart(2,'0');}).join('');
+}
+
+function make3DPie(canvas, acum, tot, isModal) {
+  var H = isModal ? 460 : 220;
+  var pw = canvas.parentElement ? canvas.parentElement.offsetWidth : 600;
+  var W = pw>0 ? pw : 600;
+  var dpr = window.devicePixelRatio||1;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+  var cx=W*0.36, cy=H*0.5, rx=Math.min(W*0.25,110), ry=rx*0.44, depth=22;
+  var start=0, slices=[];
+  acum.forEach(function(v,i){
+    var a=v/tot*Math.PI*2;
+    slices.push({s:start,e:start+a,i:i});
+    start+=a;
+  });
+  slices.slice().reverse().forEach(function(sl) {
+    var mid=(sl.s+sl.e)/2;
+    if(Math.sin(mid)>0) {
+      ctx.beginPath();
+      ctx.ellipse(cx,cy+depth,rx,ry,0,sl.s,sl.e);
+      ctx.lineTo(cx+Math.cos(sl.e)*rx, cy+Math.sin(sl.e)*ry);
+      ctx.ellipse(cx,cy,rx,ry,0,sl.e,sl.s,true);
+      ctx.closePath();
+      ctx.fillStyle=shiftColor(COL[sl.i%COL.length],-50);
+      ctx.fill(); ctx.strokeStyle='rgba(0,0,0,.15)'; ctx.lineWidth=0.5; ctx.stroke();
+    }
+  });
+  slices.forEach(function(sl) {
+    ctx.beginPath();
+    ctx.ellipse(cx,cy,rx,ry,0,sl.s,sl.e);
+    ctx.lineTo(cx,cy); ctx.closePath();
+    ctx.fillStyle=COL[sl.i%COL.length];
+    ctx.fill(); ctx.strokeStyle='rgba(0,0,0,.15)'; ctx.lineWidth=0.8; ctx.stroke();
+  });
+  slices.forEach(function(sl) {
+    var mid=(sl.s+sl.e)/2;
+    var pct=(acum[sl.i]/tot*100).toFixed(1);
+    var lx=cx+Math.cos(mid)*rx*0.62, ly=cy+Math.sin(mid)*ry*0.62;
+    if(acum[sl.i]/tot>0.06) {
+      ctx.fillStyle='#fff'; ctx.font='bold 9px sans-serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(pct+'%', lx, ly);
+    }
+  });
+  var lx=W*0.70, lsy=H*0.08, lh=H*0.17;
+  CLBLS.forEach(function(l,i) {
+    var y=lsy+i*lh;
+    ctx.fillStyle=COL[i%COL.length]; ctx.fillRect(lx,y,12,10);
+    ctx.fillStyle='#f0f4ff'; ctx.font='11px sans-serif';
+    ctx.textAlign='left'; ctx.textBaseline='top';
+    ctx.fillText(l, lx+15, y);
+    ctx.fillStyle='#7b8db0'; ctx.font='10px sans-serif';
+    ctx.fillText(fmt(acum[i]), lx+15, y+13);
+  });
+}
+
+function getConfigs() {
+  var d = getData(), d1=BASE.r1, d2=BASE.r2;
+  var acum_v = VCATS.map(function(k){return d[k].reduce(function(a,b){return a+b;},0);});
+  var acum_q = QCATS.map(function(k){return d[k].reduce(function(a,b){return a+b;},0);});
+  var tot_v  = acum_v.reduce(function(a,b){return a+b;},0);
+  var avg    = d.totais.reduce(function(a,b){return a+b;},0)/d.totais.length;
+
+  return [
+    // 1 - Valor mensal total - barras
+    {id:'c1', title:'1 - Faturamento Total Mensal', sub:'Valor enviado por mes - visao geral', is3d:false,
+     fn:function(cv) {
+       return new Chart(cv,{type:'bar',
+         data:{labels:d.labels,datasets:[{label:'Total',data:d.totais,
+           backgroundColor:d.labels.map(function(_,i){return MCOL[i%8];}),
+           borderRadius:8,borderSkipped:false}]},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return fmt(c.raw);}}}},
+           scales:scV()}});
+     }},
+
+    // 2 - Quantidade por categoria (barras agrupadas)
+    {id:'c2', title:'2 - Quantidade por Categoria', sub:'Qtd de OS/ordens enviadas por mes (Obras, Manut, IOP)', is3d:false,
+     fn:function(cv) {
+       var ds = QCATS.map(function(k,i){return{label:QLBLS[i],data:d[k],backgroundColor:COL[i],borderRadius:5,borderSkipped:false};});
+       return new Chart(cv,{type:'bar',data:{labels:d.labels,datasets:ds},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return c.dataset.label+': '+c.raw+' un';},footer:function(items){var s=items.reduce(function(a,i){return a+i.raw;},0);return 'Total: '+s+' un';}}}},
+           scales:scQ()}});
+     }},
+
+    // 3 - Valor + Quantidade (eixo duplo) - Obras
+    {id:'c3', title:'3 - Obras: Valor x Quantidade', sub:'Eixo duplo - R$ enviado vs quantidade de ordens', is3d:false,
+     fn:function(cv) {
+       return new Chart(cv,{type:'bar',
+         data:{labels:d.labels,datasets:[
+           {label:'Valor (R$)',data:d.obras_v,backgroundColor:'rgba(79,142,247,.8)',borderRadius:6,borderSkipped:false,yAxisID:'yV'},
+           {type:'line',label:'Qtd OS',data:d.obras_q,borderColor:'#34d399',backgroundColor:'transparent',pointBackgroundColor:'#34d399',pointRadius:5,borderWidth:2.5,tension:.3,yAxisID:'yQ'}
+         ]},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:bpTip('index')},
+           scales:scDual()}});
+     }},
+
+    // 4 - Valor + Quantidade (eixo duplo) - Manutencao
+    {id:'c4', title:'4 - Manutencao: Valor x Quantidade', sub:'Eixo duplo - R$ enviado vs quantidade de ordens', is3d:false,
+     fn:function(cv) {
+       return new Chart(cv,{type:'bar',
+         data:{labels:d.labels,datasets:[
+           {label:'Valor (R$)',data:d.manut_v,backgroundColor:'rgba(52,211,153,.8)',borderRadius:6,borderSkipped:false,yAxisID:'yV'},
+           {type:'line',label:'Qtd OS',data:d.manut_q,borderColor:'#f59e0b',backgroundColor:'transparent',pointBackgroundColor:'#f59e0b',pointRadius:5,borderWidth:2.5,tension:.3,yAxisID:'yQ'}
+         ]},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:bpTip('index')},
+           scales:scDual()}});
+     }},
+
+    // 5 - Valor + Quantidade (eixo duplo) - IOP
+    {id:'c5', title:'5 - IOP: Valor x Quantidade', sub:'Eixo duplo - R$ enviado vs quantidade de ordens', is3d:false,
+     fn:function(cv) {
+       return new Chart(cv,{type:'bar',
+         data:{labels:d.labels,datasets:[
+           {label:'Valor (R$)',data:d.iop_v,backgroundColor:'rgba(245,158,11,.8)',borderRadius:6,borderSkipped:false,yAxisID:'yV'},
+           {type:'line',label:'Qtd OS',data:d.iop_q,borderColor:'#a78bfa',backgroundColor:'transparent',pointBackgroundColor:'#a78bfa',pointRadius:5,borderWidth:2.5,tension:.3,yAxisID:'yQ'}
+         ]},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:bpTip('index')},
+           scales:scDual()}});
+     }},
+
+    // 6 - Valor medio por OS (ticket medio)
+    {id:'c6', title:'6 - Ticket Medio por OS', sub:'Valor medio por ordem de servico (Obras, Manut, IOP)', is3d:false,
+     fn:function(cv) {
+       var ticket = function(vArr,qArr){return vArr.map(function(v,i){return qArr[i]>0 ? v/qArr[i] : 0;});};
+       var ds = [
+         {label:'Obras',data:ticket(d.obras_v,d.obras_q),borderColor:COL[0],backgroundColor:COL[0]+'33',tension:.4,fill:true,pointRadius:5,pointBackgroundColor:COL[0],borderWidth:2.5},
+         {label:'Manut',data:ticket(d.manut_v,d.manut_q),borderColor:COL[1],backgroundColor:COL[1]+'33',tension:.4,fill:true,pointRadius:5,pointBackgroundColor:COL[1],borderWidth:2.5},
+         {label:'IOP',  data:ticket(d.iop_v,  d.iop_q),  borderColor:COL[2],backgroundColor:COL[2]+'33',tension:.4,fill:true,pointRadius:5,pointBackgroundColor:COL[2],borderWidth:2.5}
+       ];
+       return new Chart(cv,{type:'line',data:{labels:d.labels,datasets:ds},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.raw)+'/OS';}}}},
+           scales:scV()}});
+     }},
+
+    // 7 - Composicao valor acumulado (donut)
+    {id:'c7', title:'7 - Composicao do Faturamento', sub:'Participacao de cada categoria no total acumulado', is3d:false,
+     fn:function(cv) {
+       return new Chart(cv,{type:'doughnut',
+         data:{labels:CLBLS,datasets:[{data:acum_v,backgroundColor:COL,borderWidth:0,hoverOffset:8}]},
+         options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+           plugins:{legend:{position:'right',labels:{color:'#7b8db0',font:{size:11},padding:12,usePointStyle:true}},
+             tooltip:{callbacks:{label:function(c){return c.label+': '+fmt(c.raw)+' ('+(c.raw/tot_v*100).toFixed(1)+'%)';}}}}
+         }});
+     }},
+
+    // 8 - Composicao quantidade (donut)
+    {id:'c8', title:'8 - Composicao da Quantidade', sub:'Distribuicao de OS por categoria (acumulado)', is3d:false,
+     fn:function(cv) {
+       var tot_q = acum_q.reduce(function(a,b){return a+b;},0);
+       return new Chart(cv,{type:'doughnut',
+         data:{labels:QLBLS,datasets:[{data:acum_q,backgroundColor:COL,borderWidth:0,hoverOffset:8}]},
+         options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+           plugins:{legend:{position:'right',labels:{color:'#7b8db0',font:{size:11},padding:12,usePointStyle:true}},
+             tooltip:{callbacks:{label:function(c){return c.label+': '+c.raw+' OS ('+(c.raw/tot_q*100).toFixed(1)+'%)';}}}}
+         }});
+     }},
+
+    // 9 - Evolucao valor por categoria (linhas)
+    {id:'c9', title:'9 - Evolucao por Categoria', sub:'Tendencia mensal de valor por segmento', is3d:false,
+     fn:function(cv) {
+       var ds = VCATS.map(function(k,i){
+         return {label:CLBLS[i],data:d[k],borderColor:COL[i],backgroundColor:COL[i]+'22',tension:.4,fill:true,pointRadius:4,borderWidth:2};
+       });
+       return new Chart(cv,{type:'line',data:{labels:d.labels,datasets:ds},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.raw);}}}},
+           scales:scV()}});
+     }},
+
+    // 10 - Barras empilhadas valor
+    {id:'c10', title:'10 - Composicao Mensal Valor', sub:'Composicao do faturamento empilhada por mes', is3d:false,
+     fn:function(cv) {
+       var ds = VCATS.map(function(k,i){
+         return {label:CLBLS[i],data:d[k],backgroundColor:COL[i],stack:'s'};
+       });
+       return new Chart(cv,{type:'bar',data:{labels:d.labels,datasets:ds},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.raw);}}}},
+           scales:scV(true)}});
+     }},
+
+    // 11 - R1 vs R2
+    {id:'c11', title:'11 - R1 vs R2 Comparativo', sub:'Enviado x Faturado por mes', is3d:false,
+     fn:function(cv) {
+       return new Chart(cv,{type:'bar',
+         data:{labels:d1.labels,datasets:[
+           {label:'R1 Enviado', data:d1.totais,backgroundColor:COL[0],borderRadius:6,borderSkipped:false},
+           {label:'R2 Faturado',data:d2.totais,backgroundColor:COL[2],borderRadius:6,borderSkipped:false}
+         ]},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.raw);}}}},
+           scales:scV()}});
+     }},
+
+    // 12 - Evolucao Quantidade (linhas)
+    {id:'c12', title:'12 - Evolucao da Quantidade', sub:'Tendencia de OS/ordens por mes e categoria', is3d:false,
+     fn:function(cv) {
+       var ds = QCATS.map(function(k,i){
+         return {label:QLBLS[i],data:d[k],borderColor:COL[i],backgroundColor:COL[i]+'22',tension:.4,fill:false,pointRadius:6,pointBackgroundColor:COL[i],borderWidth:2.5,borderDash:i===2?[5,3]:[]};
+       });
+       return new Chart(cv,{type:'line',data:{labels:d.labels,datasets:ds},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:{mode:'index',intersect:false,callbacks:{label:function(c){return c.dataset.label+': '+c.raw+' OS';}}}},
+           scales:scQ()}});
+     }},
+
+    // 13 - Radar
+    {id:'c13', title:'13 - Radar de Desempenho', sub:'Forca relativa por categoria e mes', is3d:false,
+     fn:function(cv) {
+       var ds = d.labels.slice(0,6).map(function(l,i){
+         return {label:l,data:VCATS.map(function(k){return d[k][i]||0;}),borderColor:MCOL[i],backgroundColor:MCOL[i]+'22',pointRadius:3,borderWidth:2};
+       });
+       return new Chart(cv,{type:'radar',data:{labels:CLBLS,datasets:ds},
+         options:{responsive:true,maintainAspectRatio:false,
+           plugins:{legend:bpLeg(),tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.raw);}}}},
+           scales:{r:{ticks:{display:false},grid:{color:'rgba(255,255,255,.1)'},pointLabels:{color:'#f0f4ff',font:{size:11}},angleLines:{color:'rgba(255,255,255,.1)'}}}}});
+     }},
+
+    // 14 - 3D Valor mensal
+    {id:'c14', title:'14 - 3D Faturamento Mensal', sub:'Evolucao do total mensal em perspectiva 3D', is3d:true,
+     fn:function(cv,isModal) {
+       make3D(cv, d.labels, d.totais, d.labels.map(function(_,i){return MCOL[i%8];}), isModal);
+     }},
+
+    // 15 - 3D Composicao pizza
+    {id:'c15', title:'15 - 3D Composicao por Categoria', sub:'Participacao de cada categoria em perspectiva 3D', is3d:true,
+     fn:function(cv,isModal) {
+       make3DPie(cv, acum_v, tot_v, isModal);
+     }}
+  ];
+}
+
+function renderGallery() {
+  var g = document.getElementById('gallery');
+  g.innerHTML = '';
+  Object.values(charts).forEach(function(c){if(c&&c.destroy)c.destroy();});
+  charts = {};
+  getConfigs().forEach(function(cfg) {
+    var card = document.createElement('div');
+    card.className = 'card'+(selCard===cfg.id?' selected':'');
+    card.id = 'card-'+cfg.id;
+
+    var head = document.createElement('div');
+    head.className = 'card-head';
+
+    var info = document.createElement('div');
+    info.className = 'card-info';
+    var t = document.createElement('div'); t.className='card-title'; t.textContent=cfg.title;
+    var s = document.createElement('div'); s.className='card-sub'; s.textContent=cfg.sub;
+    info.appendChild(t); info.appendChild(s);
+
+    var btns = document.createElement('div');
+    btns.className = 'card-btns';
+    var dl = document.createElement('button');
+    dl.className='cbtn'; dl.textContent='PNG';
+    (function(id,title){ dl.addEventListener('click',function(e){e.stopPropagation();dlCard(id,title);}); })(cfg.id,cfg.title);
+    var ex = document.createElement('button');
+    ex.className='cbtn exp'; ex.textContent='&#x26F6;';
+    (function(c){ ex.addEventListener('click',function(e){e.stopPropagation();openModal(c);}); })(cfg);
+    btns.appendChild(dl); btns.appendChild(ex);
+    head.appendChild(info); head.appendChild(btns);
+
+    var wrap = document.createElement('div');
+    wrap.className='chart-wrap';
+    var cv = document.createElement('canvas');
+    cv.id = cfg.id;
+    cv.setAttribute('role','img');
+    cv.setAttribute('aria-label',cfg.title);
+    wrap.appendChild(cv);
+
+    card.appendChild(head); card.appendChild(wrap);
+    (function(c){ card.addEventListener('click',function(){openModal(c);}); })(cfg);
+    g.appendChild(card);
+
+    (function(c,canvas){
+      if(c.is3d) {
+        setTimeout(function(){c.fn(canvas,false);},80);
+      } else {
+        try{charts[c.id]=c.fn(canvas);}catch(e){console.warn(c.id,e);}
+      }
+    })(cfg,cv);
+  });
+}
+
+function dlCard(id,title) {
+  var cv = document.getElementById(id);
+  if(!cv) return;
+  var url = cv.toDataURL('image/png');
+  var a = document.createElement('a');
+  a.href=url; a.download=(title||id).replace(/[^a-z0-9]/gi,'_')+'.png'; a.click();
+}
+
+function openModal(cfg) {
+  if(!cfg) return;
+  currentModalCfg = cfg;
+  if(modalChart){modalChart.destroy();modalChart=null;}
+  document.getElementById('modalTitle').textContent = cfg.title;
+  document.getElementById('modalSub').textContent   = cfg.sub;
+  var cw = document.getElementById('modalCW');
+  cw.innerHTML = '';
+  var cv = document.createElement('canvas');
+  cv.id='modalCanvas'; cv.setAttribute('role','img'); cv.setAttribute('aria-label',cfg.title);
+  cw.appendChild(cv);
+  document.getElementById('modalOv').classList.add('open');
+  setTimeout(function(){
+    if(cfg.is3d){ cfg.fn(cv,true); }
+    else{ try{modalChart=cfg.fn(cv);}catch(e){console.warn(e);} }
+  },80);
+  selCard=cfg.id;
+  document.querySelectorAll('.card').forEach(function(c){c.classList.remove('selected');});
+  var card=document.getElementById('card-'+cfg.id);
+  if(card)card.classList.add('selected');
+}
+function closeModal() {
+  document.getElementById('modalOv').classList.remove('open');
+  if(modalChart){modalChart.destroy();modalChart=null;}
+}
+function downloadModal() {
+  var cv=document.getElementById('modalCanvas');
+  if(!cv||!currentModalCfg) return;
+  var url=cv.toDataURL('image/png');
+  var a=document.createElement('a');
+  a.href=url; a.download=(currentModalCfg.title||'grafico').replace(/[^a-z0-9]/gi,'_')+'.png'; a.click();
+}
+
+function switchTab(n,el) {
+  ['dashboard','ciclos','ia'].forEach(function(t){document.getElementById('tab-'+t).style.display=t===n?'block':'none';});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  if(n==='dashboard')renderGallery();
+  if(n==='ia')renderMemPanel();
+}
+function selectReport(n,el) {
+  curR=n;
+  document.querySelectorAll('.rsel-btn').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('activeBadge').textContent=n===1?'Relatorio 1':n===2?'Relatorio 2':'Comparativo';
+  renderKPIs(); renderGallery();
+}
+
+function addCycle() {
+  var label=document.getElementById('newMes').value;
+  if(extraCycles.find(function(c){return c.label===label;})){alert('Ciclo ja adicionado!');return;}
+  var c={label:label,at:ts(),
+    obras_q:+document.getElementById('i_obras_q').value||0,
+    obras_v:+document.getElementById('i_obras_v').value||0,
+    manut_q:+document.getElementById('i_manut_q').value||0,
+    manut_v:+document.getElementById('i_manut_v').value||0,
+    iop_q:  +document.getElementById('i_iop_q').value||0,
+    iop_v:  +document.getElementById('i_iop_v').value||0,
+    opex_v: +document.getElementById('i_opex_v').value||0,
+    backlog_v:+document.getElementById('i_backlog_v').value||0
+  };
+  extraCycles.push(c);
+  localStorage.setItem('dash_cycles',JSON.stringify(extraCycles));
+  learnCycle(c); renderCyclesList(); renderKPIs();
+  ['i_obras_q','i_obras_v','i_manut_q','i_manut_v','i_iop_q','i_iop_v','i_opex_v','i_backlog_v'].forEach(function(id){document.getElementById(id).value='';});
+}
+function removeCycle(l) {
+  extraCycles=extraCycles.filter(function(c){return c.label!==l;});
+  localStorage.setItem('dash_cycles',JSON.stringify(extraCycles));
+  renderCyclesList(); renderKPIs();
+}
+function renderCyclesList() {
+  var list=document.getElementById('ctags');
+  list.innerHTML='';
+  if(!extraCycles.length){list.innerHTML='<span style="font-size:12px;color:var(--m)">Nenhum ciclo adicionado.</span>';return;}
+  extraCycles.forEach(function(c){
+    var total=(c.obras_v||0)+(c.manut_v||0)+(c.iop_v||0)+(c.opex_v||0)+(c.backlog_v||0);
+    var tag=document.createElement('div'); tag.className='ctag';
+    var span=document.createElement('span'); span.textContent=c.label+' '+fmt(total);
+    var btn=document.createElement('button'); btn.innerHTML='&times;';
+    (function(l){btn.addEventListener('click',function(){removeCycle(l);});})(c.label);
+    tag.appendChild(span); tag.appendChild(btn); list.appendChild(tag);
+  });
+}
+
+function saveMem(text,type) {
+  aiMem.unshift({text:text,type:type,at:ts()});
+  if(aiMem.length>30)aiMem=aiMem.slice(0,30);
+  localStorage.setItem('dash_ai_mem',JSON.stringify(aiMem));
+  renderMemPanel();
+}
+function learnCycle(c) {
+  var total=(c.obras_v||0)+(c.manut_v||0)+(c.iop_v||0)+(c.opex_v||0)+(c.backlog_v||0);
+  var totalQ=(c.obras_q||0)+(c.manut_q||0)+(c.iop_q||0);
+  saveMem('Ciclo '+c.label+': valor '+fmtFull(total)+', qtd '+totalQ+' OS.','ciclo');
+}
+function extractInsight(reply) {
+  var low=reply.toLowerCase();
+  if(/cresceu|maior|lider|tend/.test(low)) saveMem('Insight: '+reply.split('\n')[0].slice(0,115),'insight');
+  if(/recomendo|sugiro|ideal/.test(low)){
+    var lines=reply.split('\n');
+    for(var i=0;i<lines.length;i++){if(/recomendo|sugiro|ideal/.test(lines[i].toLowerCase())){saveMem('Rec: '+lines[i].slice(0,115),'rec');break;}}
+  }
+}
+function clearMem(){if(confirm('Limpar toda a memoria?')){aiMem=[];localStorage.removeItem('dash_ai_mem');renderMemPanel();}}
+function renderMemPanel(){
+  var list=document.getElementById('memList'),badge=document.getElementById('memBadge'),cnt=document.getElementById('memCount'),cml=document.getElementById('cyclesMemList');
+  if(!list)return;
+  badge.textContent=aiMem.length;
+  if(cnt)cnt.textContent=aiMem.length+' mem.';
+  var ico={insight:'',ciclo:'',rec:''};
+  list.innerHTML='';
+  (aiMem.length?aiMem.slice(0,6):[]).forEach(function(m){
+    var div=document.createElement('div');div.className='mem-item';
+    div.innerHTML=(ico[m.type]||'')+m.text+'<div class="mem-time">'+m.at+'</div>';
+    list.appendChild(div);
+  });
+  if(!aiMem.length)list.innerHTML='<div style="font-size:11px;color:var(--m)">Nenhuma memoria ainda.</div>';
+  if(cml){
+    cml.innerHTML='';
+    if(!extraCycles.length){cml.innerHTML='<span style="font-size:11px;color:var(--m)">Nenhum ciclo.</span>';return;}
+    extraCycles.forEach(function(c){
+      var total=(c.obras_v||0)+(c.manut_v||0)+(c.iop_v||0)+(c.opex_v||0)+(c.backlog_v||0);
+      var div=document.createElement('div');div.style.cssText='padding:4px 0;border-bottom:1px solid var(--b);font-size:11px';
+      div.innerHTML='<strong>'+c.label+'</strong> '+fmt(total)+'<br><span style="color:var(--m)">'+c.at+'</span>';
+      cml.appendChild(div);
+    });
+  }
+}
+
+function saveKey(){
+  var k=document.getElementById('geminiKey').value.trim();
+  if(!k.startsWith('AIza')){alert('Chave invalida.');return;}
+  localStorage.setItem('dash_gemini_key',k);
+  document.getElementById('geminiKey').value='';
+  updateKeyUI(); saveMem('Gemini ativado.','insight');
+}
+function clearKey(){localStorage.removeItem('dash_gemini_key');updateKeyUI();}
+function getKey(){return localStorage.getItem('dash_gemini_key')||'';}
+function updateKeyUI(){
+  var ok=!!getKey();
+  document.getElementById('keyBox').style.display=ok?'none':'block';
+  document.getElementById('keyOk').style.display=ok?'flex':'none';
+  var dot=document.getElementById('aiDot'),st=document.getElementById('aiStatus'),btn=document.getElementById('sendBtn');
+  if(dot)dot.className='ai-dot'+(ok?'':' off');
+  if(st)st.textContent=ok?'Gemini ativo - 1.500 req/dia gratuitas':'Configure sua chave acima';
+  if(btn)btn.disabled=!ok;
+}
+
+function buildCtx(){
+  var d=getData(),d1=BASE.r1,d2=BASE.r2;
+  var total=d.totais.reduce(function(a,b){return a+b;},0);
+  var peakIdx=d.totais.indexOf(Math.max.apply(null,d.totais));
+  var totalQ=[d.obras_q,d.manut_q,d.iop_q].reduce(function(s,arr){return s+arr.reduce(function(a,b){return a+b;},0);},0);
+  var memCtx=aiMem.length?'\n\nMEMORIA:\n'+aiMem.slice(0,8).map(function(m){return'- '+m.text;}).join('\n'):'';
+  return 'Voce e uma IA gerencial. Responda em portugues, de forma objetiva e executiva.\n\n'+
+    'Relatorio: '+(curR===1?'1 Enviado':curR===2?'2 Faturado':'Comparativo')+
+    ' | Meses: '+d.labels.join(', ')+' | Total: '+fmtFull(total)+
+    ' | Melhor mes: '+d.labels[peakIdx]+' ('+fmtFull(d.totais[peakIdx])+')'+
+    ' | Qtd total OS: '+totalQ+'\n'+
+    'Totais: '+d.labels.map(function(l,i){return l.slice(0,3)+': '+fmt(d.totais[i]);}).join(' | ')+'\n'+
+    'Obras val: '+d.obras_v.map(function(v,i){return d.labels[i].slice(0,3)+': '+fmt(v);}).join(' | ')+'\n'+
+    'Obras qtd: '+d.obras_q.join(' | ')+'\n'+
+    'Manut val: '+d.manut_v.map(function(v,i){return d.labels[i].slice(0,3)+': '+fmt(v);}).join(' | ')+'\n'+
+    'Manut qtd: '+d.manut_q.join(' | ')+'\n'+
+    'IOP val: '+d.iop_v.map(function(v,i){return d.labels[i].slice(0,3)+': '+fmt(v);}).join(' | ')+'\n'+
+    'IOP qtd: '+d.iop_q.join(' | ')+'\n'+
+    'OPEX: '+d.opex_v.map(fmt).join(' | ')+'\n'+
+    'Backlog: '+d.backlog_v.map(fmt).join(' | ')+'\n'+
+    'R1 total: '+fmtFull(d1.totais.reduce(function(a,b){return a+b;},0))+
+    ' | R2 total: '+fmtFull(d2.totais.reduce(function(a,b){return a+b;},0))+'\n'+
+    '15 graficos: 1-Total mensal|2-Qtd categoria|3-Obras V+Q|4-Manut V+Q|5-IOP V+Q|6-Ticket medio|7-Donut valor|8-Donut qtd|9-Linhas valor|10-Barras emp.|11-R1vsR2|12-Linhas qtd|13-Radar|14-3D mensal|15-3D pizza'+
+    memCtx;
+}
+
+async function sendAI(){
+  var input=document.getElementById('aiInput'),msg=input.value.trim();
+  if(!msg)return;
+  var key=getKey();if(!key){alert('Configure sua chave Gemini.');return;}
+  input.value=''; appendMsg(msg,'user');
+  var lid='l'+Date.now(); appendMsg('Analisando...','ai loading',lid);
+  document.getElementById('sendBtn').disabled=true;
+  var hist=chatHist.slice(-12).map(function(h){return{role:h.role,parts:[{text:h.text}]};});
+  try{
+    var res=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+key,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:hist.concat([{role:'user',parts:[{text:buildCtx()+'\n\nPERGUNTA: '+msg}]}]),generationConfig:{maxOutputTokens:900,temperature:0.35}})
+    });
+    var data=await res.json();
+    if(data.error){
+      removeMsg(lid);
+      var code=data.error.code;
+      appendMsg(code===400?'Chave invalida.':code===429?'Limite atingido. Aguarde.':'Erro: '+data.error.message,'ai err');
+      document.getElementById('sendBtn').disabled=false;return;
+    }
+    var reply=(data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts&&data.candidates[0].content.parts[0]&&data.candidates[0].content.parts[0].text)||'Sem resposta.';
+    removeMsg(lid); appendMsg(reply,'ai');
+    chatHist.push({role:'user',text:msg},{role:'model',text:reply});
+    if(chatHist.length>24)chatHist=chatHist.slice(-24);
+    extractInsight(reply);
+  }catch(e){removeMsg(lid);appendMsg('Erro de conexao.','ai err');}
+  document.getElementById('sendBtn').disabled=false;
+}
+function useSugg(el){document.getElementById('aiInput').value=el.textContent;document.getElementById('aiInput').focus();}
+function appendMsg(text,type,id){
+  var box=document.getElementById('aiMsgs'),div=document.createElement('div');
+  div.className='msg '+type;if(id)div.id=id;div.textContent=text;
+  box.appendChild(div);box.scrollTop=box.scrollHeight;
+}
+function removeMsg(id){var el=document.getElementById(id);if(el)el.remove();}
+
+if(!localStorage.getItem('dash_gemini_key')){
+  localStorage.setItem('dash_gemini_key','AIzaSyCg3gnH7WeJY_IqHASTYSN2rqz6i9HEQP4');
+}
+renderKPIs();
+renderGallery();
+renderCyclesList();
+updateKeyUI();
+renderMemPanel();
+</script>
+
+
+</body></html>
